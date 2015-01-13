@@ -356,8 +356,10 @@ class UrlWrapper(UrlResolver, PluginSettings, SiteAuth, AutoloadPlugin):
     _ref = UrlStub()
     implements = []
     _re_implements = re.compile('\s+implements\s*=\s*\[(.*)\]')
+    _re_domains = re.compile('\s+domains\s*=\s*\[(.*)\]')
     _re_name = re.compile('\s+name\s*=\s*[\'"](.*)[\'"]')
     _found_implements = False
+    _found_domains = False
     _found_name = False
 
     def __init__(self):
@@ -369,6 +371,12 @@ class UrlWrapper(UrlResolver, PluginSettings, SiteAuth, AutoloadPlugin):
             Find the lines that define which domains are supported,
             and which interface is implemented.
         '''
+        if not self._found_domains:
+            res = self._re_domains.match(line)
+            if res:
+                self._ref.domains = res.group(1).translate(None,' "\'').split(',')
+                self._found_domains = True
+
         if not self._found_implements:
             res = self._re_implements.match(line)
             if res:
@@ -376,16 +384,16 @@ class UrlWrapper(UrlResolver, PluginSettings, SiteAuth, AutoloadPlugin):
                 for handler in implements_names:
                     self.implements.append(globals()[handler])
                 self._found_implements = True
-        
+
         if not self._found_name:
             res = self._re_name.match(line)
             if res:
                 self.name = res.group(1)
                 self._found_name = True
-    
+
     def plugin_ready(self):
-        return (self._found_implements and self._found_name)
-    
+        return (self._found_domains and self._found_implements and self._found_name)
+
     @classmethod
     def implementors(klass):
         return UrlResolver.implementors()
