@@ -34,6 +34,7 @@ error_logo = os.path.join(common.addon_path, 'resources', 'images', 'redx.png')
 class ZoouploadResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "zooupload"
+    domains = [ "zooupload.com" ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100

@@ -32,6 +32,7 @@ net = Net()
 class VidhogResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "vidhog"
+    domains = [ "vidhog.com" ]
 
 
     def __init__(self):

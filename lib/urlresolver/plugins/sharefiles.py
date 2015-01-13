@@ -32,6 +32,7 @@ import re
 class SharefilesResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "sharefiles"
+    domains = [ "sharefiles4u.com" ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100

@@ -33,6 +33,7 @@ except ImportError:
 class PremiumizeMeResolver(Plugin, UrlResolver, SiteAuth, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "Premiumize.me"
+    domains = [ "*" ]
     media_url = None
 
     def __init__(self):

@@ -29,6 +29,7 @@ error_logo = os.path.join(common.addon_path, 'resources', 'images', 'redx.png')
 class VideomegaResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "videomega"
+    domains = [ "videomega.tv", "movieshd.co" ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100
@@ -50,12 +51,12 @@ class VideomegaResolver(Plugin, UrlResolver, PluginSettings):
                 if r:
                     stream_url = r.group(1)
                     stream_url = stream_url.replace(" ","%20")
-                
+
             if stream_url:
                 return stream_url
             else:
                 return self.unresolvable(0, 'No playable video found.')
-            
+
         except urllib2.URLError, e:
             common.addon.log_error('Videomega: got http error %d fetching %s' %
                                     (e.code, web_url))
@@ -69,11 +70,31 @@ class VideomegaResolver(Plugin, UrlResolver, PluginSettings):
         return 'http://%s/iframe.php?ref=%s' % (host,media_id)
 
     def get_host_and_id(self, url):
-        r = re.search('//((?:www.)?(?:.+?))/(?:iframe.(?:php|js)\?ref=)([0-9a-zA-Z]+)', url)
-        if r:
+        r = re.search('//((?:www.)?(?:videomega.+?))/(?:iframe.(?:php|js)\?ref=)([0-9a-zA-Z]+)', url)
+        q = re.search('//(?:www.)?movieshd.co/watch-online/.*html', url)
+        if r: # videomega link
             return r.groups()
-        else:
-            return False
+        elif q: # movieshd link
+            try:
+                # Request MoviesHD page
+                req = urllib2.Request(url)
+                req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+                response = urllib2.urlopen(req)
+                link=response.read()
+                response.close()
+
+                # Find videomega reference
+                match=re.compile("'text/javascript'>ref='(.+?)?';width.*iframe").findall(link)
+                if (len(match) == 1):
+                    return ['videomega.tv', match[0]]
+            except urllib2.URLError, e:
+                common.addon.log_error('Videomega: got http error %d fetching %s' %
+                                    (e.code, web_url))
+                return self.unresolvable(code=3, msg=e)
+            except Exception, e:
+                common.addon.log_error('**** Videomega Error occured: %s' % e)
+                common.addon.show_small_popup(title='[B][COLOR white]Videomega[/COLOR][/B]', msg='[COLOR red]%s[/COLOR]' % e, delay=5000, image=error_logo)
+        return False
 
     def valid_url(self, url, host):
         if self.get_setting('enabled') == 'false': return False

@@ -31,6 +31,7 @@ error_logo = os.path.join(common.addon_path, 'resources', 'images', 'redx.png')
 class Stream2kResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "stream2k"
+    domains = [ "stream2k.com" ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100

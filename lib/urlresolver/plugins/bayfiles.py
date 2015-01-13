@@ -27,6 +27,7 @@ from time import time as wait
 class bayfilesResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "bayfiles"
+    domains = [ "bayfiles.com" ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100

@@ -32,6 +32,7 @@ net = Net()
 class LemuploadsResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "lemuploads"
+    domains = [ "lemuploads.com" ]
 
 
     def __init__(self):

@@ -29,6 +29,7 @@ net = Net()
 class HugefilesResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "hugefiles"
+    domains = [ "hugefiles.net" ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100

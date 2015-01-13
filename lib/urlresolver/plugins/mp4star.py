@@ -26,6 +26,7 @@ import urllib,urllib2,re,xbmc
 class MP4StarResolver(Plugin,UrlResolver,PluginSettings):
     implements=[UrlResolver,PluginSettings]
     name="mp4star"
+    domains=[ "mp4star.com" ]
     domain="http://mp4star.com"
     
     def __init__(self):

@@ -30,6 +30,7 @@ error_logo = os.path.join(common.addon_path, 'resources', 'images', 'redx.png')
 class vureelResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "vureel"
+    domains = [ "vureel.com" ]
 
 
     def __init__(self):

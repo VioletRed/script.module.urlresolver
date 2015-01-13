@@ -33,6 +33,7 @@ error_logo = os.path.join(common.addon_path, 'resources', 'images', 'redx.png')
 class FlashxResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "flashx"
+    domains = [ "flashx.tv" ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100

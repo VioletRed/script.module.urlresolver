@@ -28,6 +28,7 @@ logo=os.path.join(common.addon_path, 'resources', 'images', 'redx.png')
 class LetwatchResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "letwatch.us"
+    domains = [ "letwatch.us" ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100

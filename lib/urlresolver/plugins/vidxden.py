@@ -42,6 +42,7 @@ logo='http://googlechromesupportnow.com/wp-content/uploads/2012/06/Installation-
 class VidxdenResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "vidxden"
+    domains = [ 'vidxden.com', 'divxden.com', 'vidbux.com' ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100

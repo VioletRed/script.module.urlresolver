@@ -34,6 +34,7 @@ net = Net()
 class SharerepoResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "sharerepo"
+    domains = [ "sharerepo.com" ]
 
 
     def __init__(self):

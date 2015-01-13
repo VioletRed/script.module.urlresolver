@@ -29,6 +29,7 @@ error_logo = os.path.join(common.addon_path, 'resources', 'images', 'redx.png')
 class nolimitvideoResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "nolimitvideo"
+    domains = [ "nolimitvideo.com" ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100
@@ -74,6 +75,6 @@ class nolimitvideoResolver(Plugin, UrlResolver, PluginSettings):
 
     def valid_url(self, url, host):
         if self.get_setting('enabled') == 'false': return False
-        return re.match('http://(www)?.nolimitvideo.com/video/[0-9a-f]+/', 
+        return re.match('http://(www.)?nolimitvideo.com/video/[0-9a-f]+/',
                         url) or 'nolimitvideo' in host
 

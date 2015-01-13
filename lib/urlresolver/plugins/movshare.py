@@ -37,6 +37,7 @@ error_logo = os.path.join(common.addon_path, 'resources', 'images', 'redx.png')
 class MovshareResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
     name = "movshare"
+    domains = [ "movshare.net" ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100

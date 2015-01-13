@@ -27,7 +27,8 @@ from lib import jsunpack
 
 class OvfileResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
-    name = "ovile"
+    name = "ovfile"
+    domains = [ "ovile.com" ]
 
 
     def __init__(self):
