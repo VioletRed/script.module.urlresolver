@@ -16,26 +16,41 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
+import re, sys,os
 from t0mm0.common.net import Net
+import urllib2
 from urlresolver import common
 from urlresolver.plugnplay.interfaces import UrlResolver
 from urlresolver.plugnplay.interfaces import PluginSettings
 from urlresolver.plugnplay import Plugin
 
+bromix_path = os.path.dirname(os.path.realpath(__file__)) + "/../../../../plugin.video.youtube/"
+sys.path.append(bromix_path)
+from resources.lib import youtube
+from resources.lib.kodion.impl import Context
+from resources.lib.kodion.impl.xbmc import xbmc_items
+from resources.lib.youtube.helper import yt_play
+
+__provider__ = youtube.Provider()
+
 class YoutubeResolver(Plugin, UrlResolver, PluginSettings):
     implements = [UrlResolver, PluginSettings]
-    name = "youtube"
+    name = "Youtube"
     domains = [ 'youtube.com', 'youtu.be' ]
 
     def __init__(self):
         p = self.get_setting('priority') or 100
         self.priority = int(p)
+        self.video_item = None
 
     def get_media_url(self, host, media_id):
         #just call youtube addon
-        plugin = 'plugin://plugin.video.youtube/?action=play_video&videoid=' + media_id
-        return plugin
+        params = {'video_id':media_id}
+        __context__ = Context(path='/play/', params=params, override=False, plugin_id='plugin.video.youtube', plugin_name="Youtube")
+        _video_item = yt_play.play_video(__provider__, __context__, "play")
+        self.video_item = xbmc_items.to_video_item(__context__, _video_item)
+        del __context__
+        return _video_item.get_uri()
 
     def get_url(self, host, media_id):
         return 'http://youtube.com/watch?v=%s' % media_id
@@ -51,7 +66,11 @@ class YoutubeResolver(Plugin, UrlResolver, PluginSettings):
         if video_id:
             return ('youtube.com', video_id)
         else:
-            return False
+            common.addon.log_error('youtube: video id not found')
+            return self.unresolvable(code=0, msg="youtube: video id not found")
+
+    def get_list_item(self, web_url, host, media_id):
+        return self.video_item
 
     def valid_url(self, url, host):
         if self.get_setting('enabled') == 'false': return False
