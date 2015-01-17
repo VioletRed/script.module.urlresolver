@@ -154,6 +154,8 @@ class UrlResolver(Interface):
     def get_host_and_id(self, url):
         not_implemented(self)
     
+    def get_list_item(self, web_url, host, media_id):
+        pass
     
     def valid_url(self, web_url, host):
         '''

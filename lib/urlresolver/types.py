@@ -179,6 +179,11 @@ class HostedMediaFile:
                 continue
         self.__resolvers = []  # No resolvers.
         return False
+        
+    def get_list_item(self):
+        if self._valid_url:
+            return self.__resolvers[0].get_list_item(self._url, self._host, self._media_id)
+        return None
 
     def valid_url(self):
         '''
