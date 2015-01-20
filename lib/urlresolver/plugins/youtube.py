@@ -26,6 +26,7 @@ from urlresolver.plugnplay import Plugin
 
 bromix_path = os.path.dirname(os.path.realpath(__file__)) + "/../../../../plugin.video.youtube/"
 sys.path.append(bromix_path)
+print sys.path
 from resources.lib import youtube
 from resources.lib.kodion.impl import Context
 from resources.lib.kodion.impl.xbmc import xbmc_items
@@ -48,6 +49,7 @@ class YoutubeResolver(Plugin, UrlResolver, PluginSettings):
         params = {'video_id':media_id}
         __context__ = Context(path='/play/', params=params, override=False, plugin_id='plugin.video.youtube', plugin_name="Youtube")
         _video_item = yt_play.play_video(__provider__, __context__, "play")
+        if _video_item is None: return self.unresolvable(code=0,msg="WTF")
         self.video_item = xbmc_items.to_video_item(__context__, _video_item)
         del __context__
         return _video_item.get_uri()
@@ -58,7 +60,7 @@ class YoutubeResolver(Plugin, UrlResolver, PluginSettings):
     def get_host_and_id(self, url):
         if url.find('?') > -1:
             queries = common.addon.parse_query(url.split('?')[1])
-            video_id = queries.get('v', None)
+            video_id = queries.get('v', None) or queries.get('video_id', None) or queries.get('videoid', None)
         else:
             r = re.findall('/([0-9A-Za-z_\-]+)', url)
             if r:
@@ -76,7 +78,8 @@ class YoutubeResolver(Plugin, UrlResolver, PluginSettings):
         if self.get_setting('enabled') == 'false': return False
         return re.match('http[s]*://(((www.|m.)?youtube.+?(v|embed)(=|/))|' +
                         'youtu.be/)[0-9A-Za-z_\-]+', 
-                        url) or 'youtube' in host or 'youtu.be' in host
+                        url) or re.match('plugin://plugin.video.youtube/.*play.*video') or (
+                        'youtube' in host or 'youtu.be' in host)
 
     def get_settings_xml(self):
         xml = PluginSettings.get_settings_xml(self)
