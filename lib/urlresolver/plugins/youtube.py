@@ -26,7 +26,7 @@ from urlresolver.plugnplay import Plugin
 
 bromix_path = os.path.dirname(os.path.realpath(__file__)) + "/../../../../plugin.video.youtube/"
 sys.path.append(bromix_path)
-print sys.path
+
 from resources.lib import youtube
 from resources.lib.kodion.impl import Context
 from resources.lib.kodion.impl.xbmc import xbmc_items
