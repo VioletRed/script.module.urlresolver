@@ -201,8 +201,12 @@ class HostedMediaFile:
         urlresolver.lazy_plugin_scan()
         imps = []
         for imp in UrlResolver.implementors():
-            if imp.valid_url(self.get_url(), self.get_host()):
-                imps.append(imp)
+            try:
+                if imp.valid_url(self.get_url(), self.get_host()):
+                    imps.append(imp)
+            except:
+                # Resolver crashed, some message should come here
+                pass
         return imps
 
         
