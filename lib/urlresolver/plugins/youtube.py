@@ -23,8 +23,9 @@ from urlresolver import common
 from urlresolver.plugnplay.interfaces import UrlResolver
 from urlresolver.plugnplay.interfaces import PluginSettings
 from urlresolver.plugnplay import Plugin
+import xbmc
 
-bromix_path = os.path.dirname(os.path.realpath(__file__)) + "/../../../../plugin.video.youtube/"
+bromix_path = os.path.dirname(xbmc.translatePath("special://home/addons/plugin.video.youtube/"))
 sys.path.append(bromix_path)
 
 from resources.lib import youtube
@@ -51,7 +52,6 @@ class YoutubeResolver(Plugin, UrlResolver, PluginSettings):
         _video_item = yt_play.play_video(__provider__, __context__, "play")
         if _video_item is None: return self.unresolvable(code=0,msg="WTF")
         self.video_item = xbmc_items.to_video_item(__context__, _video_item)
-        del __context__
         return _video_item.get_uri()
 
     def get_url(self, host, media_id):
