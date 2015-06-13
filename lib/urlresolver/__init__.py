@@ -229,5 +229,11 @@ def _update_settings_xml():
             raise
     else:
         common.addon.log_notice('No Settings Update Needed')
-            
-_update_settings_xml()
+
+if common.addon.get_setting('addon_version') != common.addon.get_version():
+    common.addon.log_notice("Update settings from %s to %s " % (common.addon.get_setting('addon_version'), common.addon.get_version()))
+    _update_settings_xml()
+    common.addon.addon.setSetting('addon_version', common.addon.get_version())
+else:
+    common.addon.log_notice('No Settings Update Processed')
+    

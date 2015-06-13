@@ -47,6 +47,7 @@ class YoutubeResolver(Plugin, UrlResolver, PluginSettings):
 
     def get_media_url(self, host, media_id):
         #just call youtube addon
+        print "Calling youtube Addon"
         params = {'video_id':media_id}
         __context__ = Context(path='/play/', params=params, override=False, plugin_id='plugin.video.youtube', plugin_name="Youtube")
         _video_item = yt_play.play_video(__provider__, __context__, "play")
