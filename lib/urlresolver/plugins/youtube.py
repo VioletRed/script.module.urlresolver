@@ -49,9 +49,12 @@ class YoutubeResolver(Plugin, UrlResolver, PluginSettings):
         #just call youtube addon
         print "Calling youtube Addon"
         params = {'video_id':media_id}
-        __context__ = Context(path='/play/', params=params, override=False, plugin_id='plugin.video.youtube', plugin_name="Youtube")
-        _video_item = yt_play.play_video(__provider__, __context__, "play")
-        if _video_item is None: return self.unresolvable(code=0,msg="WTF")
+        try:
+            __context__ = Context(path='/play/', params=params, override=False, plugin_id='plugin.video.youtube', plugin_name="Youtube")
+            _video_item = yt_play.play_video(__provider__, __context__, "play")
+        except:
+            print "Youtube plugin failed"
+        if _video_item is None: return self.unresolvable(code=0,msg="Youtube failure")
         self.video_item = xbmc_items.to_video_item(__context__, _video_item)
         return _video_item.get_uri()
 
