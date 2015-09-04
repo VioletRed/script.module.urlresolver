@@ -54,6 +54,7 @@ class YoutubeResolver(Plugin, UrlResolver, PluginSettings):
             _video_item = yt_play.play_video(__provider__, __context__, "play")
         except:
             print "Youtube plugin failed"
+            _video_item = None
         if _video_item is None: return self.unresolvable(code=0,msg="Youtube failure")
         self.video_item = xbmc_items.to_video_item(__context__, _video_item)
         return _video_item.get_uri()
